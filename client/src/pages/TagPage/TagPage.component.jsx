@@ -1,0 +1,60 @@
+import React, {useEffect,Fragment} from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getTagPosts } from '../../redux/posts/posts.actions';
+import { Link } from 'react-router-dom';
+
+import SideBar from '../../components/SideBar/SideBar.component';
+import PostItem from '../../components/PostItem/PostItem.component';
+import RightSideBar from '../../components/right-sideBar/right-sideBar.component';
+
+const TagPage = ({ getTagPosts, post: { posts, loading }, match  }) => {
+    useEffect(() => {
+        getTagPosts(match.params.tagname);
+        // eslint-disable-next-line
+    }, [getTagPosts]);
+
+    return loading || posts === null ? <Fragment>Loading...</Fragment> : <Fragment>
+        <div className='page'>
+            <SideBar/>
+
+            <div className='questions-page'>
+                <div className='main-bar'>
+                    <div className='questions-grid'>
+                        <h3 className='questions-headline' style={{fontFamily: 'Concert One, cursive'}}>QUESTIONS TAGGED [{match.params.tagname}]</h3>
+                        <div className='questions-btn'>
+                            <Link to='/add/question'>
+                                <button className = 'btn btn-sm btn-primary btn-bg'>Ask Question</button>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className='questions-tabs'>
+                        <span>{posts.length} questions</span>
+                    </div>
+                    <div className='questions'>
+                        {posts.length === 0 ? ( <h4 style={{margin: '30px 30px'}}>There are no questions from this tag</h4> ) :
+                            posts.map(post => (
+                                <PostItem key={post.id} post={post} />
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+            <RightSideBar/>
+        </div>
+    </Fragment>
+
+
+};
+
+
+TagPage.propTypes = {
+    getTagPosts: PropTypes.func.isRequired,
+    post: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    post: state.post
+});
+
+export default connect(mapStateToProps, { getTagPosts })(TagPage);
