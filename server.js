@@ -5,9 +5,13 @@ const path = require('path');
 const http = require('http');
 const pool = require('./config/db.config');
 const index = require('./server/routes/index.route');
+const cors = require('cors')
+
 
 const express = require('express');
 const app = express();
+
+app.use(cors());
 
 // compressing api response
 app.use(compression());
@@ -18,12 +22,6 @@ app.use(morgan('dev'));
 // body-parser
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 
 // database connection
 pool.query('USE stackoverflow');
