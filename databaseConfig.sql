@@ -21,7 +21,7 @@ USE stackoverflow;
 
  CREATE TABLE answers(
      id INT AUTO_INCREMENT PRIMARY KEY,
-     body MEDIUMTEXT,
+     text MEDIUMTEXT,
      created_at TIMESTAMP DEFAULT NOW(),
      post_id INT NOT NULL,
      FOREIGN KEY(post_id) REFERENCES posts(id),
